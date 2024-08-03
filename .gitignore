@@ -1,0 +1,8 @@
+# CubeIDE
+.settings/
+Debug/
+Release/
+.metadata/
+
+# VS Code
+.vscode/
