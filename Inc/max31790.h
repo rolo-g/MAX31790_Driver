@@ -8,30 +8,31 @@
 #ifndef INC_MAX31790_H_
 #define INC_MAX31790_H_
 
-/********************************** Includes **********************************/
+/* Includes *******************************************************************/
 
 #include "stm32f0xx_hal.h"
 #include <stdbool.h>
 
-/*********************************** Macros ***********************************/
+/* Macros *********************************************************************/
 
-/* Value Limits */
+/* RPM */
+#define RPM_MIN		481
+#define SR			4
+#define NP			2
 
 /* Duty Cycle */
 #define DC_MIN		0
 #define DC_MAX		511
 
-/* Bit Manipulation */
+/* TACH */
+#define TACH_LSB_BIT_MASK		0xE0
+#define TACH_MSB_SHIFT			3
+#define TACH_LSB_SHIFT			5
 
-/* Bit Shifts */
-#define TACH_MSB_SHIFT		3
-#define TACH_LSB_SHIFT		5
+/* PWM */
 #define PWM_MSB_SHIFT		1
 #define PWM_LSB_SHIFT		7
-
-/* Bit Masks */
-#define TACH_LSB_BIT_MASK		0xE0
-#define PWM_LSB_BIT_MASK		0x80
+#define PWM_LSB_BIT_MASK	0x80
 
 /* MAX31790 Addresses and Registers */
 
@@ -156,14 +157,14 @@
 #define	WINDOW5_REG		0x64
 #define	WINDOW6_REG		0x65
 
-/****************************** Type Definitions ******************************/
+/* Type Definitions ***********************************************************/
 
 /* Contains information about a specific fan controller */
 typedef struct
 {
 	I2C_HandleTypeDef *hi2cx;		/* I2C handler of the controller */
 	uint8_t i2c_addr;				/* The I2C address of the controller*/
-} Fan_Controller;
+} fanController;
 
 /* Allows for easy reference of each individual channel */
 typedef enum
@@ -174,12 +175,12 @@ typedef enum
 	CH4,
 	CH5,
 	CH6
-} Channel;
+} channel;
 
-/********************************* Functions **********************************/
+/* Functions ******************************************************************/
 
-void Init_Controller(Fan_Controller *ctrl);
-void Set_Fan_PWM(Fan_Controller *ctrl, Channel ch, uint16_t dc);
-uint16_t Get_Fan_RPM(Fan_Controller *ctrl, Channel ch);
+void initMAX31790(fanController *ctrl);
+void setFanPWM(fanController *ctrl, channel ch, uint16_t dc);
+uint16_t getFanRPM(fanController *ctrl, channel ch);
 
 #endif /* INC_MAX31790_H_ */

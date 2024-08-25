@@ -1,1 +1,1 @@
-/home/rolo/Sync/Code/STM32/Cube/MAX31790_Driver/Src/max31790.c
+/home/rolo/Projects/MAX31790_Driver/Src/max31790.c

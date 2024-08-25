@@ -100,18 +100,18 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* Creates the fan controller struct */
-  Fan_Controller controller_1 = {
+  fanController controller_1 = {
 		  &hi2c1,			/* Stores pointer to the I2C handler */
 		  GND_GND_ADDR
   };	/* Stores the correct I2C address */
 
   /* Fan variables */
-  uint16_t dc = 0;
+  uint16_t dc = 255;
   int8_t inc = 1;
   uint16_t rpm = 0;
 
   /* Sets initial config for fan controller */
-  Init_Controller(&controller_1);
+  initMAX31790(&controller_1);
 
   /* Buffer for uart */
   char buf[64];
@@ -127,7 +127,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	/* Sets the duty cycle of the fan */
-	Set_Fan_PWM(&controller_1, CH1, dc);
+	setFanPWM(&controller_1, CH1, dc);
 
 	/* Increments or decrements the duty cycle value */
 	dc += inc;
@@ -139,16 +139,16 @@ int main(void)
 	}
 
 	/* Gets fan RPM */
-	rpm = Get_Fan_RPM(&controller_1, CH1);
+	rpm = getFanRPM(&controller_1, CH1);
 
-	/* Displays values to uart */
+	/* Displays values to UART 2 */
 	sprintf(buf, "PWM-%d\nRPM-%d\n", dc, rpm);
 	HAL_UART_Transmit(&huart2, (uint8_t *)buf, strlen(buf), HAL_MAX_DELAY);
 
 	/* Toggles green LED on and off */
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5));
 
-	/* Delays for 1 second */
+	/* Adds small delay */
 	HAL_Delay(50);
   }
   /* USER CODE END 3 */
@@ -214,7 +214,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x2000090E;
+  hi2c1.Init.Timing = 0x00201D2B;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
