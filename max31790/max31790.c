@@ -19,7 +19,7 @@ void initMAX31790(fanController *ctrl)
 	/* TODO Replace the magic numbers */
 
 	/* Resets the controller */
-	uint8_t data = 0b01000000;
+	uint8_t data = (1 << 6);
 	HAL_I2C_Mem_Write(ctrl->hi2cx, ctrl->i2c_addr,
 					GLOBAL_CONF_REG, I2C_MEMADD_SIZE_8BIT, &data,
 					sizeof(data), HAL_MAX_DELAY);
@@ -28,7 +28,7 @@ void initMAX31790(fanController *ctrl)
 
 	/* TODO Move this to a fan config function */
 	/* Enables TACH Input bit in Fan 1 Config. Register */
-	data = 0b00001000;
+	data = (1 << 3);
 	HAL_I2C_Mem_Write(ctrl->hi2cx, ctrl->i2c_addr,
 					FAN1_CONF_REG, I2C_MEMADD_SIZE_8BIT, &data,
 					sizeof(data), HAL_MAX_DELAY);
